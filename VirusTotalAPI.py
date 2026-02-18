@@ -5,11 +5,11 @@ import hashlib
 
 class VirusTotalAPI():
     def __init__(self): # constructor for the VirusTotalAPI class
-        self.api  = '889841f5f3d73d6873c117ed6536479bfaff98efc3f833265efbc6e330e2d712'
+        self.api  = ''
         self.base = 'https://www.virustotal.com/api/v3/'
         self.parsed_mail = ""
         self.headers = { "accept": "application/json",
-                         "x-apikey": "889841f5f3d73d6873c117ed6536479bfaff98efc3f833265efbc6e330e2d712"
+                         "x-apikey": ""
     }
     
  
@@ -92,7 +92,7 @@ class VirusTotalAPI():
             payload = { "url": urls_concentrated }
             headers = {
                 "accept": "application/json",
-                "x-apikey": "889841f5f3d73d6873c117ed6536479bfaff98efc3f833265efbc6e330e2d712",
+                "x-apikey": "",
                 "content-type": "application/x-www-form-urlencoded"
             }
 
