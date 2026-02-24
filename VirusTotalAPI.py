@@ -1,17 +1,23 @@
+import re
+
 import mailparser
 import requests
 from urlextract import URLExtract
 import hashlib
+from dotenv import load_dotenv
+import os
+
 
 class VirusTotalAPI():
     def __init__(self): # constructor for the VirusTotalAPI class
-        self.api  = ''
-        self.base = 'https://www.virustotal.com/api/v3/'
+        load_dotenv()
+
+        self.api  = os.getenv("API_KEY")
+        self.base = os.getenv("BASE_URL")
         self.parsed_mail = ""
         self.headers = { "accept": "application/json",
-                         "x-apikey": ""
+                         "x-apikey": os.getenv("API_KEY")
     }
-    
  
     def sha256_file(attachment):
 
@@ -65,16 +71,17 @@ class VirusTotalAPI():
     
             # check md5 hash
             url = self.base + "files/" + self.md5_file(data.encode())
-            # chech sha256 hash
+            # check sha256 hash
             url = self.base + "files/" + self.sha256_file(data.encode())
 
             response = requests.get(url, headers=self.headers)
             
 
-    def check_mail_ips(self, ip):
+    def check_header_ips(self):
+        ips = re.findall(r"\b\d{1,3}(?:\.\d{1,3}){3}\b", self.parsed_mail.headers)
+        print(ips)
 
-        url = self.base + "ip_addresses/" + ip
-
+        url = self.base + "ip_addresses/" + ips[0] if ips else "invalid_ip"
         response = requests.get(url, headers=self.headers)
         print(response.text)
 
@@ -92,7 +99,7 @@ class VirusTotalAPI():
             payload = { "url": urls_concentrated }
             headers = {
                 "accept": "application/json",
-                "x-apikey": "",
+                "x-apikey": os.getenv("API_KEY"),
                 "content-type": "application/x-www-form-urlencoded"
             }
 
